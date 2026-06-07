@@ -1,84 +1,137 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Курс по Figma</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Createx Construction — Homepage</title>
+  <link rel="stylesheet" href="createx-style.css">
 </head>
 <body>
+  <!-- Header -->
   <header class="header">
-    <div class="container header-wrap">
-      <a href="#" class="logo">🎨 FigmaCourse</a>
-      <nav class="nav">
-        <input type="checkbox" id="burger" class="burger-checkbox">
-        <label for="burger" class="burger-icon">&#9776;</label>
-        <ul class="menu">
-          <li><a href="#about">О курсе</a></li>
-          <li><a href="#benefits">Преимущества</a></li>
-          <li><a href="#reviews">Отзывы</a></li>
+    <div class="container header__inner">
+      <a href="#" class="logo">
+        <img src="https://via.placeholder.com/120x24?text=CREATE.X" alt="Createx">
+      </a>
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Work</a></li>
+          <li><a href="#">News</a></li>
+          <li><a href="#">Contacts</a></li>
         </ul>
       </nav>
+      <div class="header__contacts">
+        <span>📞 (405) 555-0128</span>
+        <span>📧 hello@createx.com</span>
+      </div>
+      <!-- Гамбургер-иконка (только мобильные) -->
+      <button class="burger" id="burger">☰</button>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1 class="hero-title">Освой веб-дизайн в Figma за 4 недели</h1>
-        <p class="hero-text">Создавай современные интерфейсы с нуля и собери портфолио</p>
-        <a href="#" class="btn">Записаться</a>
-      </div>
-    </section>
+  <!-- Hero (первый экран) -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero__title">Building The Future</h1>
+      <p class="hero__text">
+        Createx Construction Bureau is an international company with over 20 years of experience.
+      </p>
+      <a href="#" class="btn btn--primary">Learn more about us</a>
+      <a href="#" class="btn btn--outline">Submit Request</a>
+    </div>
+  </section>
 
-    <section id="benefits" class="benefits section">
-      <div class="container">
-        <h2 class="section-title">Почему стоит учиться у нас</h2>
-        <div class="benefits-grid">
-          <div class="benefit-card">
-            <div class="benefit-icon">📚</div>
-            <h3>Актуальная программа</h3>
-            <p>Никакой воды – только нужные инструменты и техники</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">🕒</div>
-            <h3>Гибкий график</h3>
-            <p>Занимайтесь в удобное время, все уроки в записи</p>
-          </div>
-          <div class="benefit-card">
-            <div class="benefit-icon">🤝</div>
-            <h3>Наставники</h3>
-            <p>Персональная поддержка и проверка домашних заданий</p>
-          </div>
+  <!-- Our Services -->
+  <section class="services">
+    <div class="container">
+      <h2 class="section-title">Our Services</h2>
+      <div class="services__grid">
+        <div class="service-card">
+          <div class="service-card__icon">🏗️</div>
+          <h3>Construction</h3>
+          <p>We build residential and commercial properties.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card__icon">🏢</div>
+          <h3>Project Development</h3>
+          <p>Full cycle of project documentation.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card__icon">🎨</div>
+          <h3>Interior Design</h3>
+          <p>Functional and aesthetic solutions.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-card__icon">⚡</div>
+          <h3>Repairs</h3>
+          <p>Reconstruction and major repairs.</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="reviews" class="reviews section">
-      <div class="container">
-        <h2 class="section-title">Отзывы выпускников</h2>
-        <div class="reviews-flex">
-          <div class="review-card">
-            <p class="review-text">«Курс помог систематизировать знания. Уже взяла первый заказ на фрилансе!»</p>
-            <p class="review-author">Анна, веб-дизайнер</p>
-          </div>
-          <div class="review-card">
-            <p class="review-text">«Подача материала на высоте. Удобные макеты, всё по делу.»</p>
-            <p class="review-author">Иван, UI/UX-дизайнер</p>
-          </div>
-          <div class="review-card">
-            <p class="review-text">«За месяц создал 3 проекта в портфолио. Очень доволен!»</p>
-            <p class="review-author">Мария, начинающий дизайнер</p>
-          </div>
-        </div>
+  <!-- Featured Projects -->
+  <section class="projects">
+    <div class="container">
+      <h2 class="section-title">Our Projects</h2>
+      <div class="projects__grid">
+        <article class="project-card">
+          <img src="https://via.placeholder.com/370x250?text=Project+1" alt="Red Finger Building">
+          <h4>Red Finger Building</h4>
+          <span>Business Centers</span>
+        </article>
+        <article class="project-card">
+          <img src="https://via.placeholder.com/370x250?text=Project+2" alt="Browns">
+          <h4>Browns</h4>
+          <span>Private Houses</span>
+        </article>
+        <article class="project-card">
+          <img src="https://via.placeholder.com/370x250?text=Project+3" alt="Citizen">
+          <h4>Citizen</h4>
+          <span>Apartments</span>
+        </article>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats__item">
+        <span class="stats__num">60+</span>
+        <span class="stats__desc">Countries</span>
+      </div>
+      <div class="stats__item">
+        <span class="stats__num">2000</span>
+        <span class="stats__desc">Projects</span>
+      </div>
+      <div class="stats__item">
+        <span class="stats__num">350+</span>
+        <span class="stats__desc">Employees</span>
+      </div>
+      <div class="stats__item">
+        <span class="stats__num">25</span>
+        <span class="stats__desc">Years</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <p>© 2024 FigmaCourse. Учебный проект по адаптивной вёрстке.</p>
+      <p>© 2025 Createx Construction. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    // Простое меню-бургер
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('nav');
+    burger.addEventListener('click', () => {
+      nav.classList.toggle('nav--open');
+    });
+  </script>
 </body>
 </html>
