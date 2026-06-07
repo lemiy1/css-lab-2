@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Createx – Online Courses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* ── Reset & Tokens ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --coral:  #f5603a;
+      --peach:  #fde8e0;
+      --dark:   #1a1a2e;
+      --grey:   #6b7280;
+      --light:  #f9fafb;
+      --white:  #ffffff;
+      --yellow: #fbbf24;
+      --fh: 'Nunito', sans-serif;
+      --fb: 'Nunito Sans', sans-serif;
+      --r: 12px;
+      --sh: 0 4px 24px rgba(0,0,0,.08);
+    }
+
+    body { font-family: var(--fb); color: var(--dark); background: var(--white); overflow-x: hidden; }
+    img  { display: block; max-width: 100%; }
+    a    { text-decoration: none; color: inherit; }
+
+    /* ── Navbar ─────────────────────────────────────── */
+    .navbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 64px; height: 70px;
+      background: var(--white);
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 1px 0 #eee;
+    }
+    .logo { font-family: var(--fh); font-weight: 900; font-size: 1.35rem; letter-spacing: -.5px; }
+    .logo span { color: var(--coral); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: .9rem; font-weight: 600; transition: color .2s; }
+    .nav-links a:hover { color: var(--coral); }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .btn-consult {
+      background: var(--coral); color: #fff; border: none;
+      padding: 10px 24px; border-radius: 6px;
+      font-family: var(--fb); font-weight: 700; font-size: .875rem; cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-consult:hover { background: #e04a27; }
+    .nav-login { font-size: .875rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; border: none; background: none; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--dark); border-radius: 2px; display: block; }
+
+    /* ── Hero ───────────────────────────────────────── */
+    .hero {
+      background: var(--peach);
+      display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 72px 64px 0;
+      min-height: 440px; overflow: hidden;
+    }
+    .hero-content { max-width: 460px; padding-bottom: 72px; }
+    .hero-play {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; font-size: .875rem; font-weight: 600;
+    }
+    .play-btn {
+      width: 40px; height: 40px; background: var(--coral); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 0 0 8px rgba(245,96,58,.15); flex-shrink: 0;
+    }
+    .hero h1 {
+      font-family: var(--fh); font-weight: 900;
+      font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15;
+      margin-bottom: 36px;
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-outline {
+      border: 2px solid var(--coral); color: var(--coral); background: transparent;
+      padding: 11px 26px; border-radius: 6px; font-weight: 700; font-size: .875rem;
+      cursor: pointer; transition: background .2s, color .2s;
+    }
+    .btn-outline:hover { background: var(--coral); color: #fff; }
+    .btn-solid {
+      background: var(--coral); color: #fff; border: 2px solid var(--coral);
+      padding: 11px 26px; border-radius: 6px; font-weight: 700; font-size: .875rem;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-solid:hover { background: #e04a27; border-color: #e04a27; }
+
+    .hero-image {
+      flex-shrink: 0; width: 48%; max-width: 520px;
+      align-self: flex-end; position: relative;
+    }
+    .hero-image img {
+      width: 100%; border-radius: 16px 16px 0 0;
+      object-fit: cover; object-position: top;
+      max-height: 420px;
+    }
+
+    /* floating badges */
+    .badge {
+      position: absolute; background: #fff; border-radius: 10px;
+      padding: 10px 16px; box-shadow: 0 4px 20px rgba(0,0,0,.12);
+      display: flex; align-items: center; gap: 10px; white-space: nowrap;
+    }
+    .badge-live { bottom: 48px; left: -60px; }
+    .badge-students { top: 32px; right: -32px; }
+    .badge-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .badge-label { font-family: var(--fh); font-weight: 800; font-size: .85rem; color: var(--dark); }
+    .badge-sub   { font-size: .72rem; color: var(--grey); margin-top: 1px; }
+
+    /* ── Stats ──────────────────────────────────────── */
+    .stats-bar {
+      background: var(--peach);
+      display: flex; align-items: center; justify-content: center;
+      padding: 28px 64px; border-top: 1px solid rgba(0,0,0,.06); flex-wrap: wrap; gap: 0;
+    }
+    .stat-item { display: flex; align-items: baseline; gap: 8px; padding: 8px 44px; position: relative; }
+    .stat-item:not(:last-child)::after {
+      content: '•'; position: absolute; right: -4px;
+      color: var(--coral); font-size: 1.2rem;
+    }
+    .stat-num   { font-family: var(--fh); font-weight: 900; font-size: 1.9rem; }
+    .stat-label { font-size: .875rem; color: var(--grey); font-weight: 600; }
+
+    /* ── Trusted By ─────────────────────────────────── */
+    .trusted {
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      gap: 56px; padding: 36px 64px; flex-wrap: wrap;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .trusted p { font-size: .8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--grey); }
+    .trusted-logos { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+    .trusted-logos img { height: 28px; width: auto; filter: grayscale(100%); opacity: .55; transition: opacity .2s, filter .2s; }
+    .trusted-logos img:hover { filter: none; opacity: 1; }
+
+    /* ── Why Createx ────────────────────────────────── */
+    .why-section {
+      display: flex; align-items: center; gap: 72px;
+      max-width: 1120px; margin: 0 auto; padding: 96px 64px;
+    }
+    .why-img-wrap {
+      flex: 0 0 46%; max-width: 480px;
+      border-radius: var(--r); overflow: hidden; box-shadow: var(--sh);
+      position: relative;
+    }
+    .why-img-wrap img { width: 100%; height: 400px; object-fit: cover; object-position: top; display: block; }
+    .why-content { flex: 1; }
+    .section-tag { font-size: .72rem; font-weight: 800; letter-spacing: 1.8px; text-transform: uppercase; color: var(--coral); margin-bottom: 12px; }
+    .why-content h2 { font-family: var(--fh); font-weight: 900; font-size: clamp(1.7rem, 2.8vw, 2.25rem); line-height: 1.2; margin-bottom: 28px; }
+    .why-list { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+    .why-list li { display: flex; align-items: flex-start; gap: 12px; font-size: .92rem; color: var(--grey); line-height: 1.6; }
+    .chk { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; }
+
+    /* ── Certificate Banner ─────────────────────────── */
+    .cert-section {
+      background: var(--light);
+      display: flex; align-items: center; justify-content: center; gap: 72px;
+      padding: 80px 64px; flex-wrap: wrap;
+    }
+    .cert-content { max-width: 440px; }
+    .cert-content h2 { font-family: var(--fh); font-weight: 900; font-size: clamp(1.6rem,2.8vw,2.2rem); line-height: 1.2; margin-bottom: 16px; }
+    .cert-content p { font-size: .95rem; color: var(--grey); line-height: 1.7; margin-bottom: 32px; }
+    .cert-img { max-width: 480px; width: 100%; border-radius: var(--r); box-shadow: 0 8px 40px rgba(0,0,0,.12); }
+
+    /* ── Courses ────────────────────────────────────── */
+    .courses-section { padding: 80px 64px; background: #fafafa; }
+    .courses-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      max-width: 1120px; margin: 0 auto 48px;
+    }
+    .courses-top h2 { font-family: var(--fh); font-weight: 900; font-size: clamp(1.6rem,2.8vw,2.2rem); }
+    .btn-outline-sm {
+      border: 2px solid var(--coral); color: var(--coral); background: transparent;
+      padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: .875rem;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: background .2s, color .2s;
+    }
+    .btn-outline-sm:hover { background: var(--coral); color: #fff; }
+
+    .courses-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 24px;
+      max-width: 1120px; margin: 0 auto;
+    }
+    .course-card {
+      background: var(--white); border-radius: var(--r);
+      display: flex; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      transition: box-shadow .25s, transform .25s;
+    }
+    .course-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,.13); transform: translateY(-2px); }
+    .c-thumb {
+      width: 140px; flex-shrink: 0; background: var(--yellow);
+      display: flex; align-items: flex-end; overflow: hidden; position: relative;
+    }
+    .c-thumb img { width: 100%; height: 140px; object-fit: cover; object-position: top; }
+    .c-info { padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .c-tag {
+      display: inline-block; padding: 3px 10px; border-radius: 4px;
+      font-size: .7rem; font-weight: 700; color: #fff; margin-bottom: 10px; width: fit-content;
+    }
+    .t-mk { background: #22c55e; }
+    .t-mg { background: #3b82f6; }
+    .t-hr { background: #ec4899; }
+    .t-ds { background: #8b5cf6; }
+    .c-title { font-family: var(--fh); font-weight: 800; font-size: .95rem; line-height: 1.3; margin-bottom: 10px; color: var(--dark); }
+    .c-meta  { display: flex; align-items: center; gap: 6px; font-size: .82rem; }
+    .c-price { color: var(--coral); font-weight: 800; font-size: .95rem; }
+    .c-author { color: var(--grey); }
+
+    /* ── Tutors ─────────────────────────────────────── */
+    .tutors-section { padding: 80px 64px; background: var(--white); }
+    .tutors-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      max-width: 1120px; margin: 0 auto 48px;
+    }
+    .tutors-top h2 { font-family: var(--fh); font-weight: 900; font-size: clamp(1.6rem,2.8vw,2.2rem); }
+
+    .tutors-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 24px;
+      max-width: 1120px; margin: 0 auto;
+    }
+    .tutor-card {
+      border-radius: var(--r); overflow: hidden; box-shadow: var(--sh);
+      transition: transform .25s, box-shadow .25s; cursor: pointer;
+      background: var(--yellow);
+    }
+    .tutor-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.14); }
+    .tutor-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; object-position: top; display: block; }
+    .tutor-info { padding: 16px; background: var(--white); }
+    .tutor-name { font-family: var(--fh); font-weight: 800; font-size: .95rem; margin-bottom: 4px; }
+    .tutor-role { font-size: .8rem; color: var(--grey); }
+
+    /* ── Footer ─────────────────────────────────────── */
+    .footer {
+      background: var(--dark); color: rgba(255,255,255,.7);
+      padding: 56px 64px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
+    }
+    .footer-brand .logo { color: #fff; margin-bottom: 16px; }
+    .footer-brand p { font-size: .875rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { font-family: var(--fh); font-weight: 800; font-size: .95rem; color: #fff; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a { font-size: .875rem; color: rgba(255,255,255,.6); transition: color .2s; }
+    .footer-col ul a:hover { color: var(--coral); }
+    .footer-bottom {
+      background: #111; color: rgba(255,255,255,.4);
+      text-align: center; padding: 18px 64px; font-size: .8rem;
+    }
+
+    /* ── Mobile Nav ─────────────────────────────────── */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; background: var(--white); z-index: 200;
+      flex-direction: column; padding: 32px; gap: 24px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mnav-close { align-self: flex-end; font-size: 1.5rem; cursor: pointer; }
+    .mobile-nav a { font-family: var(--fh); font-weight: 800; font-size: 1.3rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 12px; }
+
+    /* ── Responsive ─────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .navbar       { padding: 0 32px; }
+      .hero         { padding: 56px 32px 0; }
+      .stats-bar    { padding: 24px 32px; }
+      .trusted      { padding: 28px 32px; }
+      .why-section  { padding: 72px 32px; gap: 48px; }
+      .cert-section { padding: 64px 32px; }
+      .courses-section, .tutors-section { padding: 64px 32px; }
+      .footer       { padding: 48px 32px; }
+      .tutors-grid  { grid-template-columns: repeat(3,1fr); }
+      .courses-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .navbar { padding: 0 24px; }
+      .nav-links, .nav-login { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { flex-direction: column; padding: 40px 24px 0; align-items: flex-start; min-height: auto; }
+      .hero-content { max-width: 100%; padding-bottom: 32px; order: 2; }
+      .hero-image   { width: 100%; max-width: 100%; order: 1; }
+      .hero-image img { border-radius: 12px 12px 0 0; max-height: 280px; }
+      .badge-live    { left: 8px; bottom: 12px; }
+      .badge-students { right: 8px; top: 12px; }
+
+      .stats-bar    { padding: 20px 16px; gap: 16px; }
+      .stat-item    { padding: 6px 16px; }
+      .stat-item:not(:last-child)::after { display: none; }
+
+      .trusted      { gap: 24px; padding: 24px; }
+      .trusted-logos { gap: 24px; }
+
+      .why-section  { flex-direction: column; padding: 56px 24px; gap: 36px; }
+      .why-img-wrap { flex: none; width: 100%; max-width: 100%; }
+      .why-img-wrap img { height: 280px; }
+
+      .cert-section { flex-direction: column; padding: 56px 24px; gap: 40px; }
+
+      .courses-section, .tutors-section { padding: 56px 24px; }
+      .courses-top, .tutors-top { flex-direction: column; align-items: flex-start; gap: 20px; }
+
+      .tutors-grid  { grid-template-columns: repeat(2,1fr); }
+
+      .footer       { padding: 40px 24px; }
+      .footer-bottom { padding: 16px 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 1.75rem; }
+      .tutors-grid { grid-template-columns: repeat(2,1fr); gap: 16px; }
+      .course-card  { flex-direction: column; }
+      .c-thumb      { width: 100%; }
+      .c-thumb img  { width: 100%; height: 180px; }
+      .stat-num     { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ══════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="logo">CREATE<span>✕</span></div>
+  <ul class="nav-links">
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Courses</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Contacts</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-consult">Get consultation</button>
+    <a href="#" class="nav-login">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      Log in / Register
+    </a>
+    <button class="hamburger" id="hambBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-nav" id="mobileNav">
+  <span class="mnav-close" id="mnavClose">✕</span>
+  <a href="#">About Us</a><a href="#">Courses</a>
+  <a href="#">Events</a><a href="#">Blog</a><a href="#">Contacts</a>
+  <button class="btn-consult" style="width:fit-content;margin-top:8px">Get consultation</button>
+</div>
+
+<!-- ═══ HERO ═════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-play">
+      <div class="play-btn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="white"><polygon points="3,1 13,7 3,13"/></svg>
+      </div>
+      Play showreel
+    </div>
+    <h1>Enjoy studying<br>with Createx<br>Online Courses</h1>
+    <div class="hero-btns">
+      <button class="btn-outline">About us</button>
+      <button class="btn-solid">Explore courses</button>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <img src="photo-student.png" alt="Student studying online"/>
+    <!-- floating badge: live -->
+    <div class="badge badge-live">
+      <div class="badge-icon" style="background:rgba(245,96,58,.12)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#f5603a"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div>
+        <div class="badge-label">Live class</div>
+        <div class="badge-sub">Started now</div>
+      </div>
+    </div>
+    <!-- floating badge: students -->
+    <div class="badge badge-students">
+      <div class="badge-icon" style="background:rgba(251,191,36,.18)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"><circle cx="9" cy="7" r="4"/><circle cx="17" cy="9" r="3"/><path d="M1 21c0-4 3.6-6 8-6s8 2 8 6"/><path d="M17 14c2.2.3 4 1.8 4 4"/></svg>
+      </div>
+      <div>
+        <div class="badge-label">1.2k Students</div>
+        <div class="badge-sub">This month</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS ══════════════════════════════════════════════ -->
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">1200</span><span class="stat-label">Students graduated</span></div>
+  <div class="stat-item"><span class="stat-num">84</span><span class="stat-label">Completed courses</span></div>
+  <div class="stat-item"><span class="stat-num">16</span><span class="stat-label">Qualified tutors</span></div>
+  <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">Years of experience</span></div>
+</div>
+
+<!-- ═══ TRUSTED BY ════════════════════════════════════════ -->
+<div class="trusted">
+  <p>Trusted by</p>
+  <div class="trusted-logos">
+    <img src="logo-national.png" alt="National"/>
+    <img src="logo-sentinal.png" alt="Sentinal Consulting"/>
+    <img src="logo-delmar.png"   alt="Del Mar Strategy"/>
+  </div>
+</div>
+
+<!-- ═══ WHY CREATEX ══════════════════════════════════════ -->
+<section style="background:#fff; overflow:hidden; position:relative;">
+  <div class="why-section">
+    <div class="why-img-wrap">
+      <img src="photo-student.png" alt="Student with headphones"/>
+    </div>
+    <div class="why-content">
+      <p class="section-tag">WHO WE ARE</p>
+      <h2>Why Createx?</h2>
+      <ul class="why-list">
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          A fermentum in morbi pretium aliquam adipiscing donec tempus.
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Vulputate placerat amet pulvinar lorem nisl.
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Consequat feugiat habitant gravida quisque elit bibendum id adipiscing sed.
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Etiam duis lobortis in fames ultrices commodo nibh.
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Tincidunt sagittis neque sem ac eget.
+        </li>
+        <li>
+          <svg class="chk" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f5603a" stroke-width="1.5"/><path d="M6 10l3 3 5-5" stroke="#f5603a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Ultricies amet justo et eget quisque purus vulputate dapibus tortor.
+        </li>
+      </ul>
+      <button class="btn-solid">More about us</button>
+    </div>
+  </div>
+  <!-- decorative dots -->
+  <div style="position:absolute;bottom:48px;right:40px;opacity:.15;color:#fbbf24;pointer-events:none;">
+    <svg width="120" height="80" viewBox="0 0 120 80" fill="currentColor">
+      <circle cx="10" cy="10" r="4"/><circle cx="30" cy="10" r="4"/><circle cx="50" cy="10" r="4"/><circle cx="70" cy="10" r="4"/><circle cx="90" cy="10" r="4"/><circle cx="110" cy="10" r="4"/>
+      <circle cx="10" cy="30" r="4"/><circle cx="30" cy="30" r="4"/><circle cx="50" cy="30" r="4"/><circle cx="70" cy="30" r="4"/><circle cx="90" cy="30" r="4"/><circle cx="110" cy="30" r="4"/>
+      <circle cx="10" cy="50" r="4"/><circle cx="30" cy="50" r="4"/><circle cx="50" cy="50" r="4"/><circle cx="70" cy="50" r="4"/><circle cx="90" cy="50" r="4"/><circle cx="110" cy="50" r="4"/>
+      <circle cx="10" cy="70" r="4"/><circle cx="30" cy="70" r="4"/><circle cx="50" cy="70" r="4"/><circle cx="70" cy="70" r="4"/><circle cx="90" cy="70" r="4"/><circle cx="110" cy="70" r="4"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ CERTIFICATE SECTION ═══════════════════════════════ -->
+<section class="cert-section">
+  <div class="cert-content">
+    <p class="section-tag">ACHIEVE MORE</p>
+    <h2>Get a Certificate<br>Upon Completion</h2>
+    <p>Earn an industry-recognized certificate when you complete any of our courses. Share it with your professional network on LinkedIn and stand out to employers worldwide.</p>
+    <button class="btn-solid">Explore courses</button>
+  </div>
+  <img class="cert-img" src="certificate.png" alt="Course completion certificate"/>
+</section>
+
+<!-- ═══ FEATURED COURSES ══════════════════════════════════ -->
+<section class="courses-section">
+  <div class="courses-top">
+    <div>
+      <p class="section-tag">READY TO LEARN?</p>
+      <h2>Featured Courses</h2>
+    </div>
+    <button class="btn-outline-sm">View all courses</button>
+  </div>
+
+  <div class="courses-grid">
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-1.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-mk">Marketing</span>
+        <div class="c-title">The Ultimate Google Ads Training Course</div>
+        <div class="c-meta"><span class="c-price">$100</span><span class="c-author">| by Jerome Bell</span></div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-2.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-mg">Management</span>
+        <div class="c-title">Product Management Fundamentals</div>
+        <div class="c-meta"><span class="c-price">$480</span><span class="c-author">| by Marvin McKinney</span></div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-3.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-hr">HR &amp; Recruiting</span>
+        <div class="c-title">HR Management and Analytics</div>
+        <div class="c-meta"><span class="c-price">$200</span><span class="c-author">| by Leslie Alexander Li</span></div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-4.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-mk">Marketing</span>
+        <div class="c-title">Brand Management &amp; PR Communications</div>
+        <div class="c-meta"><span class="c-price">$530</span><span class="c-author">| by Kristin Watson</span></div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-5.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-mg">Management</span>
+        <div class="c-title">Business Development Strategies</div>
+        <div class="c-meta"><span class="c-price">$340</span><span class="c-author">| by Floyd Miles</span></div>
+      </div>
+    </div>
+    <div class="course-card">
+      <div class="c-thumb"><img src="tutor-6.png" alt="Instructor"/></div>
+      <div class="c-info">
+        <span class="c-tag t-ds">Design</span>
+        <div class="c-title">Graphic Design Basic</div>
+        <div class="c-meta"><span class="c-price">$150</span><span class="c-author">| by Darrell Steward</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TUTORS ═════════════════════════════════════════════ -->
+<section class="tutors-section">
+  <div class="tutors-top">
+    <div>
+      <p class="section-tag">LEARN FROM THE BEST</p>
+      <h2>Our Qualified Tutors</h2>
+    </div>
+    <button class="btn-outline-sm">View all tutors</button>
+  </div>
+  <div class="tutors-grid">
+    <div class="tutor-card">
+      <img src="tutor-1.png" alt="Jerome Bell"/>
+      <div class="tutor-info"><div class="tutor-name">Jerome Bell</div><div class="tutor-role">Marketing Expert</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-2.png" alt="Kristin Watson"/>
+      <div class="tutor-info"><div class="tutor-name">Kristin Watson</div><div class="tutor-role">Brand Strategist</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-3.png" alt="Marvin McKinney"/>
+      <div class="tutor-info"><div class="tutor-name">Marvin McKinney</div><div class="tutor-role">Product Manager</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-4.png" alt="Leslie Alexander"/>
+      <div class="tutor-info"><div class="tutor-name">Leslie Alexander</div><div class="tutor-role">HR Specialist</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-5.png" alt="Floyd Miles"/>
+      <div class="tutor-info"><div class="tutor-name">Floyd Miles</div><div class="tutor-role">Business Dev.</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-6.png" alt="Darrell Steward"/>
+      <div class="tutor-info"><div class="tutor-name">Darrell Steward</div><div class="tutor-role">Graphic Designer</div></div>
+    </div>
+    <div class="tutor-card">
+      <img src="tutor-7.png" alt="Robert Fox"/>
+      <div class="tutor-info"><div class="tutor-name">Robert Fox</div><div class="tutor-role">Finance Advisor</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-brand">
+    <div class="logo">CREATE<span style="color:var(--coral)">✕</span></div>
+    <p style="margin-top:16px">Empowering learners worldwide with flexible, expert-led online courses since 2019.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Contacts</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Courses</h4>
+    <ul>
+      <li><a href="#">Marketing</a></li>
+      <li><a href="#">Management</a></li>
+      <li><a href="#">Design</a></li>
+      <li><a href="#">HR &amp; Recruiting</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Support</h4>
+    <ul>
+      <li><a href="#">Help Center</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Use</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">© 2024 Createx Online Courses. All rights reserved.</div>
+
+<script>
+  document.getElementById('hambBtn').addEventListener('click', () =>
+    document.getElementById('mobileNav').classList.add('open'));
+  document.getElementById('mnavClose').addEventListener('click', () =>
+    document.getElementById('mobileNav').classList.remove('open'));
+</script>
+</body>
+</html>
